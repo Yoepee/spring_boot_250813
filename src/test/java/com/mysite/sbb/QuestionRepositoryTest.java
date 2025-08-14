@@ -7,13 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest
-class SbbApplicationTests {
+class QuestionRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
 
@@ -30,4 +31,13 @@ class SbbApplicationTests {
         assertEquals("sbb가 무엇인가요?", q1.getSubject());
     }
 
+    @Test
+    @DisplayName("findById")
+    void t2() {
+        Optional<Question> oq = questionRepository.findById(1);
+        if(oq.isPresent()){
+            Question question = oq.get();
+            assertEquals("sbb가 무엇인가요?", question.getSubject());
+        }
+    }
 }
