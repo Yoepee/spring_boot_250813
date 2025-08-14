@@ -55,4 +55,30 @@ class QuestionRepositoryTest {
                 "sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다.").get();
         assertThat(q.getId()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("findBySubjectLike ")
+    void t5() {
+        List<Question> qList = this.questionRepository.findBySubjectLike ("%sbb%");
+        Question q = qList.get(0);
+        assertThat(q.getSubject()).isEqualTo("sbb가 무엇인가요?");
+    }
+
+    @Test
+    @DisplayName("update")
+    void t6() {
+        Optional<Question> oq = questionRepository.findById(1);
+        assertThat(oq.isPresent());
+        if (oq.isPresent()){
+            Question q = oq.get();
+            q.setSubject("수정된 제목");
+            this.questionRepository.save(q);
+        }
+
+        Optional<Question> oq2 = questionRepository.findById(1);
+        if (oq2.isPresent()){
+            Question q = oq2.get();
+            assertEquals("수정된 제목", q.getSubject());
+        }
+    }
 }
