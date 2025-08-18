@@ -108,5 +108,42 @@ class QuestionRepositoryTest {
         answerRepository.save(a);
         Answer a2 = answerRepository.findById(1).get();
         assertThat(a2.getContent()).isEqualTo(content);
+
+        assertThat(a.getId()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("답변 생성 by oneToMany")
+    @Transactional
+    void t9() {
+        Question q = questionRepository.findById(2).get();
+        String content = "네 자동으로 생성됩니다.";
+
+        int beforeCount = q.getAnswerList().size();
+
+        Answer a = new Answer();
+        a.setContent(content);
+        q.getAnswerList().add(a);
+
+        int afterCount = q.getAnswerList().size();
+        assertThat(a.getId()).isEqualTo(null);
+        assertThat(afterCount).isEqualTo(beforeCount+1);
+    }
+
+    @Test
+    @DisplayName("답변 생성 by oneToMany 2")
+    @Transactional
+    void t10() {
+        Question q = questionRepository.findById(2).get();
+        String content = "네 자동으로 생성됩니다.";
+
+        int beforeCount = q.getAnswerList().size();
+
+        Answer a = q.addAnswer(content);
+        assertThat(a.getContent()).isEqualTo(content);
+
+        int afterCount = q.getAnswerList().size();
+        assertThat(a.getId()).isEqualTo(null);
+        assertThat(afterCount).isEqualTo(beforeCount+1);
     }
 }
