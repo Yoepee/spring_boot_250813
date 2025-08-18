@@ -116,9 +116,7 @@ class QuestionRepositoryTest {
     @DisplayName("답변 생성 by oneToMany")
     @Transactional
     void t9() {
-        Question q = new Question();
-        q.setSubject("제목");
-        q.setContent("내용");
+        Question q = questionRepository.findById(2).get();
         String content = "네 자동으로 생성됩니다.";
 
         int beforeCount = q.getAnswerList().size();
@@ -126,10 +124,9 @@ class QuestionRepositoryTest {
         Answer a = new Answer();
         a.setContent(content);
         q.getAnswerList().add(a);
-        questionRepository.saveAndFlush(q);;
 
         int afterCount = q.getAnswerList().size();
-        assertThat(a.getId()).isNotNull();
+        assertThat(a.getId()).isEqualTo(null);
         assertThat(afterCount).isEqualTo(beforeCount+1);
     }
 
@@ -149,5 +146,16 @@ class QuestionRepositoryTest {
         int afterCount = q.getAnswerList().size();
         assertThat(a.getId()).isNotNull();
         assertThat(afterCount).isEqualTo(beforeCount+1);
+    }
+
+    @Test
+    @DisplayName("답변 조회")
+    @Transactional
+    void t11() {
+        Question question = questionRepository.findById(2).get();
+
+        List<Answer> answerList = question.getAnswerList();
+        Answer a = answerList.get(0);
+        assertThat(a.getContent()).isEqualTo("네 자동으로 생성됩니다.");
     }
 }
