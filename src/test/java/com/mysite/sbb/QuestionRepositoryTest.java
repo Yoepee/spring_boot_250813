@@ -1,5 +1,6 @@
 package com.mysite.sbb;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,19 +67,14 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("update")
-    void t6() {
-        Optional<Question> oq = questionRepository.findById(1);
-        assertThat(oq.isPresent());
-        if (oq.isPresent()){
-            Question q = oq.get();
-            q.setSubject("수정된 제목");
-            this.questionRepository.save(q);
-        }
+    @Transactional // 테스트 케이스를 실행 이후에 원상복구시킴
+    void t6() { // 가장 먼저 실행시키기 위해서 t0로 메소드 이름 변경해도 정상동작
+        Question q = questionRepository.findById(1).get();
+        assertThat(q).isNotNull();
+        q.setSubject("수정된 제목");
+        this.questionRepository.save(q);
 
-        Optional<Question> oq2 = questionRepository.findById(1);
-        if (oq2.isPresent()){
-            Question q = oq2.get();
-            assertEquals("수정된 제목", q.getSubject());
-        }
+        Question q2 = questionRepository.findBySubject("수정된 제목").get();
+        assertThat(q2).isNotNull();
     }
 }
