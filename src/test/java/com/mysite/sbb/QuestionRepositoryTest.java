@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class QuestionRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Test
     @DisplayName("findAll")
@@ -88,5 +91,22 @@ class QuestionRepositoryTest {
         questionRepository.delete(q);
 
         assertThat(questionRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("답변 생성")
+    @Transactional
+    void t8() {
+        Question q = questionRepository.findById(2).get();
+        String content = "네 자동으로 생성됩니다.";
+
+        Answer a = new Answer();
+        a.setContent(content);
+        a.setQuestion(q);
+        a.setCreateDate(LocalDateTime.now());
+
+        answerRepository.save(a);
+        Answer a2 = answerRepository.findById(1).get();
+        assertThat(a2.getContent()).isEqualTo(content);
     }
 }
