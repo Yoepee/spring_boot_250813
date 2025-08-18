@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest
+@Transactional
 class QuestionRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
@@ -70,7 +71,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("update")
-    @Transactional // 테스트 케이스를 실행 이후에 원상복구시킴
     void t6() { // 가장 먼저 실행시키기 위해서 t0로 메소드 이름 변경해도 정상동작
         Question q = questionRepository.findById(1).get();
         assertThat(q).isNotNull();
@@ -83,7 +83,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("삭제")
-    @Transactional
     void t7() {
         assertThat(questionRepository.count()).isEqualTo(2);
 
@@ -95,7 +94,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("답변 생성")
-    @Transactional
     void t8() {
         Question q = questionRepository.findById(2).get();
         String content = "네 자동으로 생성됩니다.";
@@ -114,7 +112,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("답변 생성 by oneToMany")
-    @Transactional
     void t9() {
         Question q = questionRepository.findById(2).get();
         String content = "네 자동으로 생성됩니다.";
@@ -132,7 +129,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("답변 생성 by oneToMany 2")
-    @Transactional
     void t10() {
         Question q = questionRepository.findById(2).get();
         String content = "네 자동으로 생성됩니다.";
@@ -150,7 +146,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("답변 조회")
-    @Transactional
     void t11() {
         Question question = questionRepository.findById(2).get();
 
@@ -169,7 +164,6 @@ class QuestionRepositoryTest {
 
     @Test
     @DisplayName("답변 조회 by oneToMany")
-    @Transactional
     void t13 () {
         Question question = questionRepository.findById(2).get();
 
