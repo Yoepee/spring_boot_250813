@@ -19,6 +19,7 @@ public class Answer {
 
     private LocalDateTime createDate;
 
+    // 기본적으로 EAGER 모드, LAZY 환경 사용 시 fetch = FetchType.LAZY 추가
     @ManyToOne
     private Question question;
 }
