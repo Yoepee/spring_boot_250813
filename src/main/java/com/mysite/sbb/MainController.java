@@ -9,10 +9,9 @@ import java.time.LocalDateTime;
 
 @Controller
 public class MainController {
-    @ResponseBody
     @GetMapping("/")
     public String index() {
-        return "sbb";
+        return "redirect:/question/list";
     }
 
     @ResponseBody
